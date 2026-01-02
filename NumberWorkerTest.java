@@ -15,16 +15,14 @@ public class NumberWorkerTest {
     @Test
     void testWorkerInterruptStops() throws InterruptedException {
 
-        NumberList <Number> lista = new NumberList<>();//crio a lista
-        NumberWorker <Number> worker = new NumberWorker(lista,"thread worker");//crio a thread
+        NumberList <Number> lista = new NumberList<>();
+        NumberWorker <Number> worker = new NumberWorker(lista,"thread worker");
 
-        worker.start();//faço ela dar start no run e, supostamente, entrar no wait pois a lista estará vazia
+        worker.start();
 
-        Thread.sleep(100);//faz a thread principal esperar para termos certeza que a worker está em wait
-        worker.interrupt();//dou o interrupt para cair na exceção do run
-        worker.join(1000);//faz a thread principal esperar a worker terminar de executar, pois
-        //quando da o interrupt ela só pausa, até entrar na exceção há um tempo, e se eu não parar a principal,
-        //ela será mais rápida e pode ser que a worker ainda não matou a thread
+        Thread.sleep(100);
+        worker.interrupt();
+        worker.join(1000);
 
         assertFalse(worker.isAlive());
 
@@ -97,10 +95,8 @@ public class NumberWorkerTest {
 
         for (int i = 0; i < 50; i++) lista.add(i);
 
-        // aguardar até os 50 serem processados (timeout seguro)
         boolean allProcessed = latch.await(5, TimeUnit.SECONDS);
 
-        // interromper e aguardar término das threads
         w1.interrupt();
         w2.interrupt();
         w1.join(500);
@@ -112,3 +108,4 @@ public class NumberWorkerTest {
 
 
 }
+

@@ -64,7 +64,6 @@ public class NumberListTest{
 
         Thread t = new Thread(() -> {
             try {
-                // esse remove() tem que bloquear até alguém chamar lista.add()
                 result[0] = lista.remove();
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
@@ -73,27 +72,16 @@ public class NumberListTest{
 
         t.start();
 
-        // coloquei a thread principal para dormir para que de tempo
-        //da threat t ser bloqueada pelo remove() (se não funcionaria incorretamente)
-        //eu praticamente forço t entrar no wait()
         Thread.sleep(100);
 
-        // aqui eu dou o notify e acordo a thread t
         lista.add(42);
-
-        // isso faz com que a thread principal espere (num tempo máximo de 1000 milisegundos)
-        // a thread t executar, pois do contrário a thread principal seguiria com o código
-        // e poderia ser que a thread t não teria tido tempo de completar a remoção e definir
-        //result[0]
+        
         t.join(1000);
-        //se o código der errado esse tempo estoura e result[0] se torna um valor nulo
-
-
-        // se for nulo vai mostrar a mensagem, se não for nulo, o result[0] será
-        // atualizado com o valor adicionado
+        
         assertNotNull(result[0], "O remove() não retornou valor (thread pode não ter sido acordada)");
         assertEquals(42, result[0].intValue());
     }
 
 
 }
+

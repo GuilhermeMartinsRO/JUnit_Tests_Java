@@ -20,7 +20,7 @@ public class Main {
 			e.printStackTrace();
 		}
 
-        // Encerra a thread
         worker.interrupt();
 	}
 }
+
